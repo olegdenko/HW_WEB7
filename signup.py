@@ -1,6 +1,6 @@
 from sqlalchemy.exc import SQLAlchemyError
-from database.db import session
-from database.models import User
+from src.db import session
+from src.models import User
 
 if __name__ == "__main__":
     login = input("Login: ")

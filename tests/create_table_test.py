@@ -3,6 +3,7 @@ import configparser
 import pathlib
 
 from psycopg2 import Error
+from src.models import Base
 
 
 file_config = pathlib.Path(__file__).parent.parent.joinpath('config.ini')
@@ -26,15 +27,9 @@ def execute_sql_file(filename):
             password=password
         )
 
-        cursor = connection.cursor()
 
-        with open(filename, 'r') as sql_file:
-            sql_commands = sql_file.read().split(';')
+        Base.metadata.create_all(engine)
 
-            for command in sql_commands:
-                if command:
-                    print(command)
-                    cursor.execute(command)
 
         connection.commit()
 

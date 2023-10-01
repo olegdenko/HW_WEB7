@@ -1,7 +1,11 @@
 import argparse
 import sys
 from sqlalchemy.exc import SQLAlchemyError
-from database.repository import get_user, get_all_todos, create_todo, update_todo, remove_todo
+
+from sqlalchemy import and_
+from src.crud import get_user, get_all_todos, create_todo, update_todo, remove_todo, get_student_load, get_teachers
+from src.db import session
+from src.models import Student, Teacher
 
 
 parser = argparse.ArgumentParser(description='Todo APP')
@@ -24,6 +28,9 @@ _id = my_arg.get('id')
 login = my_arg.get('login')
 
 
+
+
+
 def main(user):
     match action:
         case 'create':
@@ -42,14 +49,18 @@ def main(user):
         case 'remove':
             r = remove_todo(_id=_id, user=user)
             print(f'Remove {r}')
+        case 'student':
+            print(get_student_load())
         case _:
             print('Nothing?')
 
 
 if __name__ == "__main__":
-    user = get_user(login)
-    password = input('Password: ')
-    if password == user.password:
-        main(user)
-    else:
-        print('Wrong password')
+    # get_student_load()
+    get_teachers()
+    # user = get_user(login)
+    # password = input('Password: ')
+    # if password == user.password:
+    #     main(user)
+    # else:
+    #     print('Wrong password')
