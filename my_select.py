@@ -1,7 +1,6 @@
 from src.db import session
 from src.models import Teacher, Subject, Group, Student, Grade
 from sqlalchemy import func, desc, select, and_
-from sqlalchemy.orm import aliased
 
 # Функція для знаходження 5 студентів із найбільшим середнім балом з усіх предметів
 
@@ -129,17 +128,14 @@ def select_9(student_id):
 
 
 def select_10(student_id, teacher_id):
-    student_alias = aliased(Student)
-    subject_alias = aliased(Subject)
+    subq = select(Subject.name.label('course_name'))\
+        .join(Grade, Subject.id == Grade.subject_id)\
+        .join(Student, Grade.student_id == Student.id)\
+        .join(Teacher, Subject.teacher_id == Teacher.id)\
+        .filter(Student.id == student_id, Teacher.id == teacher_id)\
+        .group_by(Subject.name).alias()
 
-    q = session.query(subject_alias.name.label('course_name')) \
-        .join(Grade, (student_alias.id == Grade.student_id) & (subject_alias.id == Grade.subject_id)) \
-        .join(Teacher, subject_alias.teacher_id == Teacher.id) \
-        .filter(student_alias.id == student_id) \
-        .filter(Teacher.id == teacher_id) \
-        .group_by(subject_alias.name) \
-        .order_by(subject_alias.name)
-
+    q = session.query(subq.c.course_name).order_by(subq.c.course_name)
     result = q.all()
     return result
 
@@ -149,7 +145,7 @@ def select_10(student_id, teacher_id):
 def select_11(teacher_id, student_id):
     q = session.query(Teacher.full_name.label('teacher_name'),
                       Student.full_name.label('student_name'),
-                      func.round(func.avg(Grade.grade), 2).label('average_grade'))\
+                      func.round(func.avg(Grade.grade), 2).label('avg_grade'))\
         .join(Subject, Subject.teacher_id == Teacher.id)\
         .join(Grade, and_(Grade.student_id == student_id, Grade.subject_id == Subject.id))\
         .join(Student, Student.id == student_id)\
@@ -193,11 +189,11 @@ if __name__ == "__main__":
     result5 = select_5(3)
     result6 = select_6(2)
     result7 = select_7(2, 2)
-    result8 = select_8(4)
+    result8 = select_8(1)
     result9 = select_9(45)
-    result10 = select_10(22, 3)
-    result11 = 0  # select_11(3, 15)
-    result12 = 0  # select_12(3, 2)
+    result10 = select_10(66, 2)
+    result11 = select_11(1, 22)
+    result12 = select_12(3, 2)
     
     print(
         f'\n{result1}\n{result2}\n{result3}\n{result4}\n \
