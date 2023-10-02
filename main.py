@@ -1,36 +1,29 @@
 import argparse
-import sys
-import logging
-from sqlalchemy.exc import SQLAlchemyError
 
-from sqlalchemy import and_
 from src.crud import get_user, get_all_todos, create_todo, update_todo, remove_todo, get_student_load, get_teachers
-from src.db import session
 from src.models import Student, Teacher
 
-logging.getLogger('sqlalchemy.engine').setLevel(logging.WARNING)
 
 parser = argparse.ArgumentParser(description='Todo APP')
-parser.add_argument('--action', help='Command: create, update, list, remove')
+parser.add_argument('--action', '-a' help='Command: create, remove, update, delete, list')
 parser.add_argument('--id')
 parser.add_argument('--title')
 parser.add_argument('--desc')
 parser.add_argument('--login')
+parser.add_argument('--model', '-m')
+parser.add_argument('--name', '-n')
 
 
 arguments = parser.parse_args()
-# print(arguments)
+print(arguments)
 my_arg = vars(arguments)
-# print(my_arg)
+print(my_arg)
 
 action = my_arg.get('action')
 title = my_arg.get('title')
 description = my_arg.get('desc')
 _id = my_arg.get('id')
 login = my_arg.get('login')
-
-
-
 
 
 def main(user):

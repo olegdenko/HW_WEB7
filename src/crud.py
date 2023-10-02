@@ -39,20 +39,45 @@ def remove_todo(_id, user):
     return r
 
 
-def create_teacher(title, description, user):
+def create_model(title, description, user):
+    user = User(name='Boris Johnson')
+    session.add(user)
+    session.commit()
+
+    article = Article(title='Our country’s saddest day',
+                    content='Lorem ipsum...', user_id=user.id)
+    session.add(article)
+    session.commit()
+
+
+def read_model():
+    students = session.query(Student).options(
+        joinedload(Student.teachers)).all()
+    for st in students:
+        print(
+            f"id: {st.id}, name: {st.first_name} {st.last_name}, email: {st.email}")
+        print(f"{[t.full_name for t in st.teachers]}")
+
+
+def update_model(title, description, user):
     todo = Teacher(title=title, description=description, user=user)
     session.add(todo)
     session.commit()
     session.close()
 
 
-# def get_student():
-#     students = session.query(Student).options(
-#         joinedload(Student.teachers)).all()
-#     for st in students:
-#         print(
-#             f"id: {st.id}, name: {st.first_name} {st.last_name}, email: {st.email}")
-#         print(f"{[t.full_name for t in st.teachers]}")
+def delete_model(title, description, user):
+    todo = Teacher(title=title, description=description, user=user)
+    session.add(todo)
+    session.commit()
+    session.close()
+
+
+def list_model(title, description, user):
+    todo = Teacher(title=title, description=description, user=user)
+    session.add(todo)
+    session.commit()
+    session.close()
 
 
 def get_student_load():
