@@ -6,7 +6,7 @@ from random import randint, choice
 from pprint import pprint
 from db import session
 
-from models import User, Todo, Teacher, TeacherStudent, Subject, Group, Student, Grade
+from models import User, Todo, Teacher, TeacherStudent, Subject, Group, Student, Grade, ContactPerson
 
 SUBJECTSES = ["Вища математика",
               "Дискретна математика",
@@ -109,25 +109,42 @@ def seed_relationship():
     session.commit()
 
 
+def seed_contacts():
+    students = session.query(Student).all()
+
+    for _ in range(len(list(students)) + 4):
+        student = random.choice(students)
+        cp = ContactPerson(
+            first_name=fake.first_name(),
+            last_name=fake.last_name(),
+            email=fake.email(),
+            phone=fake.phone_number(),
+            address=fake.address(),
+            student_id=student.id
+        )
+
+        session.add(cp)
+    session.commit()
+
 if __name__ == "__main__":
     try:
-        session.query(TeacherStudent).delete()
-        session.query(Grade).delete()
-        # session.query(ContactPerson).delete()
-        session.query(Student).delete()
-        session.query(Group).delete()
-        session.query(Subject).delete()
-        session.query(Teacher).delete()
-        session.query(User).delete()
-        session.query(Todo).delete()
+        # session.query(TeacherStudent).delete()
+        # session.query(Grade).delete()
+        # # session.query(ContactPerson).delete()
+        # session.query(Student).delete()
+        # session.query(Group).delete()
+        # session.query(Subject).delete()
+        # session.query(Teacher).delete()
+        # session.query(User).delete()
+        # session.query(Todo).delete()
 
-        session.commit()
-
-        seed_teachers()
-        seed_subjects()
-        seed_groups()
-        seed_students()
-        seed_grades()
-        seed_relationship()
+        # session.commit()
+        seed_contacts()
+        # seed_teachers()
+        # seed_subjects()
+        # seed_groups()
+        # seed_students()
+        # seed_grades()
+        # seed_relationship()
     except SQLAlchemyError as error:
         pprint(error)

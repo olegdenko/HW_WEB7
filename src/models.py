@@ -1,7 +1,11 @@
+import logging
 from sqlalchemy import Integer, String, Column, ForeignKey, DateTime, func, event, Date
 from sqlalchemy.orm import declarative_base, relationship
 from sqlalchemy.ext.hybrid import hybrid_property
 from src.db import engine
+
+logging.getLogger('sqlalchemy.engine').setLevel(logging.WARNING)
+
 
 Base = declarative_base()
 
@@ -75,7 +79,7 @@ class ContactPerson(Base):
     address = Column(String(150), nullable=False)
     student_id = Column(Integer, ForeignKey(
         'students.id', ondelete='CASCADE'))
-    students = relationship(
+    student = relationship(
         'Student', back_populates='contacts')
 
     @hybrid_property

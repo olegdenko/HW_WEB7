@@ -1,5 +1,6 @@
 import argparse
 import sys
+import logging
 from sqlalchemy.exc import SQLAlchemyError
 
 from sqlalchemy import and_
@@ -7,6 +8,7 @@ from src.crud import get_user, get_all_todos, create_todo, update_todo, remove_t
 from src.db import session
 from src.models import Student, Teacher
 
+logging.getLogger('sqlalchemy.engine').setLevel(logging.WARNING)
 
 parser = argparse.ArgumentParser(description='Todo APP')
 parser.add_argument('--action', help='Command: create, update, list, remove')
