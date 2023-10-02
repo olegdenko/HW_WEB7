@@ -109,7 +109,7 @@ class Grade(Base):
     subject_id = Column(Integer, ForeignKey('subjects.id'))
     student_id = Column(Integer, ForeignKey('students.id'))
     grade = Column(Integer)
-    day_of = Column(DateTime)
+    day_of = Column(Date)
 
 
 @event.listens_for(Todo, 'before_update')
